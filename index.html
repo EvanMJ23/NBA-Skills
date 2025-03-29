@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA SKILLS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        body {
+            background-color: black;
+            color: #F5F5F5;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #FF6F61;
+            font-weight: 700;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        .player-img {
+            width: 300px;
+            border: 3px solid #61A4FF;
+            margin: 10px;
+            border-radius: 15px;
+        }
+        .formulario, .encuesta, .rutina {
+            background-color: #FFF3E0;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            background-color: #FF6F61;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #E64A45;
+        }
+        select, input {
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .rutina-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NBA SKILLS</h1>
+        <h2>Los Mejores Dribleros de la NBA</h2>
+        <p>Allen Iverson y Kyrie Irving han sido dos de los jugadores con el mejor manejo del balón en la historia de la NBA. Iverson, famoso por su icónico crossover, dejó huella con su rapidez y destreza. Kyrie, por otro lado, es reconocido por su habilidad en el dribbling y su capacidad para finalizar en la pintura con movimientos impresionantes.</p>
+        <img class="player-img" src="Allen.jpg" alt="Allen Iverson">
+        <img class="player-img" src="kyrie.jpg" alt="Kyrie Irving">
+        
+        <div class="formulario">
+            <h2>Descubre qué regates eres bueno</h2>
+            <form id="skillForm">
+                <label for="mano">¿Cuál es tu mano hábil?</label>
+                <select id="mano" required>
+                    <option value="derecha">Derecha</option>
+                    <option value="izquierda">Izquierda</option>
+                </select>
+                <br><br>
+                <label for="experiencia">¿Cuánto tiempo llevas jugando?</label>
+                <select id="experiencia" required>
+                    <option value="1">1 año</option>
+                    <option value="5">5 o menos años</option>
+                    <option value="10">10 o menos años</option>
+                    <option value="15">15 o menos años</option>
+                    <option value="mas">Más de 15 años</option>
+                </select>
+                <br><br>
+                <label for="posicion">¿Qué posición juegas?</label>
+                <select id="posicion" required>
+                    <option value="base">Base</option>
+                    <option value="escolta">Escolta</option>
+                    <option value="alero">Alero</option>
+                    <option value="alaPivot">Ala-pívot</option>
+                    <option value="pivot">Pívot</option>
+                </select>
+                <br><br>
+                <button type="button" onclick="mostrarResultado()">Descubrir</button>
+            </form>
+            <p id="resultado"></p>
+        </div>
+        
+        <div class="encuesta">
+            <h2>¿Quién es el mejor driblador?</h2>
+            <input type="radio" name="dribbler" value="kyrie" onclick="mostrarVideo('kyrie')"> Kyrie Irving<br>
+            <input type="radio" name="dribbler" value="allen" onclick="mostrarVideo('allen')"> Allen Iverson
+            <div id="video-container"></div>
+        </div>
+        
+        <div class="rutina">
+            <h2>🔥 Rutina de Tiro de Stephen Curry 🔥</h2>
+            <button onclick="mostrarRutina()">Mostrar Rutina</button>
+            <div id="rutina-content" class="rutina-content">
+                <ul>
+                    <li>🎯 100 tiros de calentamiento de media distancia.</li>
+                    <li>🏀 50 tiros en movimiento desde el perímetro.</li>
+                    <li>🔥 50 triples desde diferentes zonas.</li>
+                    <li>⚡ 20 tiros en situaciones simuladas de partido.</li>
+                    <li>🎯 10 tiros libres para terminar.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        function mostrarResultado() {
+            let mano = document.getElementById("mano").value;
+            let experiencia = document.getElementById("experiencia").value;
+            let posicion = document.getElementById("posicion").value;
+            let regates = [];
+
+            if (experiencia === "1" || experiencia === "5") {
+                regates.push("Crossover sencillo", "Hesitation");
+            } else if (experiencia === "10") {
+                regates.push("Crossover avanzado", "Step-back", "Spin move");
+            } else if (experiencia === "15" || experiencia === "mas") {
+                regates.push("Double crossover", "Shamgod", "Behind-the-back pro", "Kyrie spin move");
+            }
+
+            if (mano === "izquierda") {
+                regates.push("Reverse crossover");
+            }
+
+            if (posicion === "base" || posicion === "escolta") {
+                regates.push("In & Out", "Behind-the-back");
+            }
+
+            document.getElementById("resultado").innerText = "Regates recomendados según tu información: " + regates.join(", ");
+        }
+
+        function mostrarVideo(jugador) {
+            let container = document.getElementById("video-container");
+            let videoHTML = "";
+
+            if (jugador === "kyrie") {
+                videoHTML = '<video width="560" height="315" controls><source src="Kyrie.mp4" type="video/mp4">Tu navegador no soporta el elemento de video.</video>';
+            } else if (jugador === "allen") {
+                videoHTML = '<video width="560" height="315" controls><source src="allen.mp4" type="video/mp4">Tu navegador no soporta el elemento de video.</video>';
+            }
+
+            container.innerHTML = videoHTML;
+        }
+
+        function mostrarRutina() {
+            let rutina = document.getElementById("rutina-content");
+            rutina.style.display = (rutina.style.display === "none" || rutina.style.display === "") ? "block" : "none";
+        }
+    </script>
+</body>
+</html>
