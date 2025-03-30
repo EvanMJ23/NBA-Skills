@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basket Minigame</title>
+    <style>
+        body {
+            text-align: center;
+            background: linear-gradient(to bottom, #87CEFA, #4682B4);
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        .link-image img {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+        }
+        .instructions {
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        canvas {
+            background: #e9792f;
+            border: 5px solid rgb(80, 22, 4);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+            display: none;
+            width: 400px;
+            height: 450px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background: orange;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏀 Basket Minigame 🏀</h1>
+    <div class="link-image">
+        <a href="https://evanmj23.github.io/NBA-Skills/" target="_blank">
+            <img src="BaketGamePro.jpeg" alt="NBA Skills">
+        </a>
+    </div>
+    <div class="instructions" id="instructions">
+        <p>📜 Instrucciones:</p>
+        <p>Mantén presionado para cargar potencia y suelta para lanzar.</p>
+        <p>🎯 Encesta para ganar puntos. Cada 20 puntos el personaje se mueve.</p>
+        <button onclick="startGame()">¡Jugar!</button>
+    </div>
+    <canvas id="gameCanvas" width="400" height="450"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const instructions = document.getElementById("instructions");
+        let score = 0;
+        let playerX = 150;
+        let basketX = 160;
+        let ballX = playerX + 20, ballY = 400, ballSpeedX = 0, ballSpeedY = 0;
+        let shooting = false;
+        let power = 0;
+        let charging = false;
+
+        function drawBasket() {
+            ctx.fillStyle = "orange";
+            ctx.fillRect(basketX, 70, 60, 12);
+            ctx.fillStyle = "black";
+            ctx.fillRect(basketX + 22, 82, 16, 8);
+        }
+
+        function drawPlayer() {
+            ctx.fillStyle = "blue";
+            ctx.fillRect(playerX, 370, 40, 60);
+            ctx.fillStyle = "brown";
+            ctx.beginPath();
+            ctx.arc(playerX + 20, 355, 12, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawBall() {
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (shooting) {
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
+                ballSpeedY += 0.3;
+
+                if (ballY >= 400) {
+                    ballY = 400;
+                    shooting = false;
+                    ballX = playerX + 20;
+                }
+                if (ballY <= 85 && ballX > basketX && ballX < basketX + 60) {
+                    score++;
+                    ballX = playerX + 20;
+                    ballY = 400;
+                    shooting = false;
+                    if (score % 20 === 0 && score <= 1000) {
+                        playerX = Math.random() * (canvas.width - 40);
+                    }
+                }
+            }
+
+            drawBasket();
+            drawPlayer();
+            drawBall();
+            requestAnimationFrame(update);
+        }
+
+        function startGame() {
+            instructions.style.display = "none";
+            canvas.style.display = "block";
+            update();
+        }
+
+        canvas.addEventListener("mousedown", () => {
+            if (!shooting) {
+                charging = true;
+                power = 0;
+            }
+        });
+
+        canvas.addEventListener("mouseup", () => {
+            if (charging) {
+                charging = false;
+                ballSpeedX = (Math.random() - 0.5) * 4;
+                ballSpeedY = -power / 5;
+                shooting = true;
+            }
+        });
+
+        setInterval(() => {
+            if (charging && power < 100) {
+                power += 5;
+            }
+        }, 50);
+    </script>
+</body>
+</html>
